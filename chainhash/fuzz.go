@@ -6,5 +6,5 @@ import (
 
 func Fuzz(input []byte) {
     dcrd_chainhash.NewHashFromStr(string(input))
+    dcrd_chainhash.HashB(input)
 }
-
