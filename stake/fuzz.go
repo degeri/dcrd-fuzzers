@@ -9,6 +9,9 @@ func Fuzz(input []byte) {
 		{
 			PkScript: input,
 		},
+		{
+			PkScript: input,
+		},
 	}
 	dcrd_stake.SStxStakeOutputInfo(outputs)
 }
