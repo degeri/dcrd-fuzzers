@@ -1,12 +1,12 @@
 package wire
 
 import (
-    "encoding/binary"
 	"bytes"
+	"encoding/binary"
 	"io"
 
-    dcrd_chainhash "github.com/decred/dcrd/chaincfg/chainhash"
-    dcrd_wire "github.com/decred/dcrd/wire"
+	dcrd_chainhash "github.com/decred/dcrd/chaincfg/chainhash"
+	dcrd_wire "github.com/decred/dcrd/wire"
 )
 
 // fixedWriter implements the io.Writer interface and intentially allows
@@ -77,86 +77,86 @@ func newFixedReader(max int, buf []byte) io.Reader {
 }
 
 func min(a, b uint32) uint32 {
-    if a < b {
-        return a
-    }
-    return b
+	if a < b {
+		return a
+	}
+	return b
 }
 
 func dcrdWire(pver uint32, net uint32, input []byte) {
-    {
-        rbuf := bytes.NewBuffer(input)
-        var mblock dcrd_wire.MsgBlock
-        mblock.DeserializeTxLoc(rbuf)
-    }
-    if len(input) >= 24 {
-        length := binary.LittleEndian.Uint32(input[16:20])
-        length = min(length, uint32(len(input) - 24))
-        payload := input[24:24+length]
-        checksum := dcrd_chainhash.HashB(payload)[0:4]
-        copy(input[20:], checksum)
-    }
-    r := newFixedReader(len(input), input)
-    _, msg, _, err := dcrd_wire.ReadMessageN(r, pver, dcrd_wire.CurrencyNet(net))
-    if err != nil {
-        return
-    }
-    switch msgx := msg.(type) {
-        case *dcrd_wire.MsgVersion:
-            break
-		case *dcrd_wire.MsgVerAck:
-            break
-		case *dcrd_wire.MsgGetAddr:
-            break
-		case *dcrd_wire.MsgAddr:
-            break
-		case *dcrd_wire.MsgPing:
-            break
-		case *dcrd_wire.MsgPong:
-            break
-		case *dcrd_wire.MsgMemPool:
-            break
-		case *dcrd_wire.MsgGetMiningState:
-            break
-		case *dcrd_wire.MsgMiningState:
-            break
-		case *dcrd_wire.MsgTx:
-            msgx.BytesPrefix()
-            msgx.BytesWitness()
-            msgx.PkScriptLocs()
-            break
-		case *dcrd_wire.MsgBlock:
-            break
-		case *dcrd_wire.MsgInv:
-            break
-		case *dcrd_wire.MsgHeaders:
-            break
-		case *dcrd_wire.MsgNotFound:
-            break
-		case *dcrd_wire.MsgGetData:
-            break
-        /* TODO */
-		case *dcrd_wire.MsgCFHeaders:
-            break
-		case *dcrd_wire.MsgCFTypes:
-            break
-		case *dcrd_wire.MsgFeeFilter:
-            break
-		case *dcrd_wire.MsgReject:
-            break
-		case *dcrd_wire.MsgSendHeaders:
-            break
-    }
-    var buf bytes.Buffer
-    dcrd_wire.WriteMessageN(&buf, msg, pver, dcrd_wire.CurrencyNet(net))
+	{
+		rbuf := bytes.NewBuffer(input)
+		var mblock dcrd_wire.MsgBlock
+		mblock.DeserializeTxLoc(rbuf)
+	}
+	if len(input) >= 24 {
+		length := binary.LittleEndian.Uint32(input[16:20])
+		length = min(length, uint32(len(input)-24))
+		payload := input[24 : 24+length]
+		checksum := dcrd_chainhash.HashB(payload)[0:4]
+		copy(input[20:], checksum)
+	}
+	r := newFixedReader(len(input), input)
+	_, msg, _, err := dcrd_wire.ReadMessageN(r, pver, dcrd_wire.CurrencyNet(net))
+	if err != nil {
+		return
+	}
+	switch msgx := msg.(type) {
+	case *dcrd_wire.MsgVersion:
+		break
+	case *dcrd_wire.MsgVerAck:
+		break
+	case *dcrd_wire.MsgGetAddr:
+		break
+	case *dcrd_wire.MsgAddr:
+		break
+	case *dcrd_wire.MsgPing:
+		break
+	case *dcrd_wire.MsgPong:
+		break
+	case *dcrd_wire.MsgMemPool:
+		break
+	case *dcrd_wire.MsgGetMiningState:
+		break
+	case *dcrd_wire.MsgMiningState:
+		break
+	case *dcrd_wire.MsgTx:
+		msgx.BytesPrefix()
+		msgx.BytesWitness()
+		msgx.PkScriptLocs()
+		break
+	case *dcrd_wire.MsgBlock:
+		break
+	case *dcrd_wire.MsgInv:
+		break
+	case *dcrd_wire.MsgHeaders:
+		break
+	case *dcrd_wire.MsgNotFound:
+		break
+	case *dcrd_wire.MsgGetData:
+		break
+		/* TODO */
+	case *dcrd_wire.MsgCFHeaders:
+		break
+	case *dcrd_wire.MsgCFTypes:
+		break
+	case *dcrd_wire.MsgFeeFilter:
+		break
+	case *dcrd_wire.MsgReject:
+		break
+	case *dcrd_wire.MsgSendHeaders:
+		break
+	}
+	var buf bytes.Buffer
+	dcrd_wire.WriteMessageN(&buf, msg, pver, dcrd_wire.CurrencyNet(net))
 }
 
 func Fuzz(input []byte) {
-    if len(input) < 8 {
-        return
-    }
-    pver := binary.BigEndian.Uint32(input[0:4])
-    net := binary.BigEndian.Uint32(input[4:8])
-    input = input[8:]
-    dcrdWire(pver, net, input)
+	if len(input) < 8 {
+		return
+	}
+	pver := binary.BigEndian.Uint32(input[0:4])
+	net := binary.BigEndian.Uint32(input[4:8])
+	input = input[8:]
+	dcrdWire(pver, net, input)
 }
