@@ -151,12 +151,13 @@ func dcrdWire(pver uint32, net uint32, input []byte) {
 	dcrd_wire.WriteMessageN(&buf, msg, pver, dcrd_wire.CurrencyNet(net))
 }
 
-func Fuzz(input []byte) {
+func Fuzz(input []byte) int {
 	if len(input) < 8 {
-		return
+		return -1
 	}
 	pver := binary.BigEndian.Uint32(input[0:4])
 	net := binary.BigEndian.Uint32(input[4:8])
 	input = input[8:]
 	dcrdWire(pver, net, input)
+	return 0
 }

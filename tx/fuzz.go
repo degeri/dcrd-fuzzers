@@ -5,7 +5,7 @@ import (
 	dcrd_txsort "github.com/decred/dcrd/dcrutil/v3/txsort"
 )
 
-func Fuzz(input []byte) {
+func Fuzz(input []byte) int {
 	tx, err := dcrd_util.NewTxFromBytes(input)
 	if err == nil {
 		dcrd_util.NewTx(tx.MsgTx())
@@ -15,4 +15,5 @@ func Fuzz(input []byte) {
 		dcrd_txsort.Sort(msgTx)
 		dcrd_txsort.InPlaceSort(msgTx)
 	}
+	return 0
 }

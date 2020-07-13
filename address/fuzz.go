@@ -6,7 +6,7 @@ import (
 	dcrd_util "github.com/decred/dcrd/dcrutil/v3"
 )
 
-func Fuzz(input []byte) {
+func Fuzz(input []byte) int {
 	{
 		addr, err := dcrd_util.DecodeAddress(string(input), dcrd_chaincfg.MainNetParams())
 		if err == nil {
@@ -25,4 +25,5 @@ func Fuzz(input []byte) {
 	dcrd_util.NewAddressSecpPubKey(input, dcrd_chaincfg.MainNetParams())
 	dcrd_util.NewAddressEdwardsPubKey(input, dcrd_chaincfg.MainNetParams())
 	dcrd_util.NewAddressSecSchnorrPubKey(input, dcrd_chaincfg.MainNetParams())
+	return 0
 }

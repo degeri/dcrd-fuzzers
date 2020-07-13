@@ -60,7 +60,7 @@ func dcrd_ExtractPKScriptAddrs(input []byte) {
 	dcrd_txscript.ExtractPkScriptAddrs(scriptVersion, input, dcrd_chaincfg.MainNetParams())
 }
 
-func Fuzz(input []byte) {
+func Fuzz(input []byte) int {
 	if dcrd_txscript.IsMultisigSigScript(input) {
 		dcrd_txscript.MultisigRedeemScriptFromScriptSig(input)
 		/* Crashes 31-08-2018 dcrd_txscript.GetMultisigMandN(input) */
@@ -128,4 +128,5 @@ func Fuzz(input []byte) {
 			dcrd_txscript.PayToAddrScript(addr)
 		}
 	}
+	return 0
 }

@@ -5,7 +5,7 @@ import (
 	dcrd_chainec "github.com/decred/dcrd/chaincfg/chainec"
 )
 
-func Fuzz(input []byte) {
+func Fuzz(input []byte) int {
 	dcrd_chainec.Edwards.ParsePubKey(input)
 	dcrd_chainec.Edwards.PrivKeyFromBytes(input)
 	{
@@ -28,4 +28,5 @@ func Fuzz(input []byte) {
 	}
 	dcrd_chainec.Edwards.ParseDERSignature(input)
 	dcrd_chainec.Edwards.ParseSignature(input)
+	return 0
 }
