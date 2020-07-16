@@ -6,7 +6,7 @@ import (
 	dcrd_util "github.com/decred/dcrd/dcrutil/v3"
 )
 
-func Fuzz(input []byte) {
+func Fuzz(input []byte) int {
 	buf := bytes.NewBuffer(input)
 	a1, err1 := binary.ReadVarint(buf)
 	a2, err2 := binary.ReadVarint(buf)
@@ -24,4 +24,5 @@ func Fuzz(input []byte) {
 			aAmnt.MulF64(b)
 		}
 	}
+	return 0
 }

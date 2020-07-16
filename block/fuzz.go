@@ -5,7 +5,7 @@ import (
 	dcrd_util "github.com/decred/dcrd/dcrutil/v3"
 )
 
-func Fuzz(input []byte) {
+func Fuzz(input []byte) int {
 	block, err := dcrd_util.NewBlockFromBytes(input)
 	if err == nil {
 		txs := block.Transactions()
@@ -59,4 +59,5 @@ func Fuzz(input []byte) {
 			}
 		}
 	}
+	return 0
 }

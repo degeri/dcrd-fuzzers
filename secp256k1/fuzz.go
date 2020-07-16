@@ -6,7 +6,7 @@ import (
 	dcrd_ecdsa "github.com/decred/dcrd/dcrec/secp256k1/v3/ecdsa"
 )
 
-func Fuzz(input []byte) {
+func Fuzz(input []byte) int {
 	{
 		pk, err := dcrd_secp256k1.ParsePubKey(input)
 		if err == nil {
@@ -41,4 +41,5 @@ func Fuzz(input []byte) {
 	{
 		dcrd_ecdsa.ParseDERSignature(input)
 	}
+	return 0
 }
